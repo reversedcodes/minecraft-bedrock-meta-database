@@ -1,0 +1,52 @@
+name: Bedrock Client GDK
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Bedrock Client Updater and refresh token
+        env:
+          TOKENS: ${{ secrets.TOKENS }}
+          TOKENS_OUT_FILE: new_tokens.b64
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python main.py
+
+      - name: Update TOKENS secret if file exists
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_FOR_SECRETS }}
+        run: |
+          if [ -f new_tokens.b64 ]; then
+            NEW_TOKENS=$(cat new_tokens.b64)
+            if [ -n "$NEW_TOKENS" ]; then
+              echo "Updating TOKENS secret"
+              echo "$NEW_TOKENS" | gh secret set TOKENS --repo "$GITHUB_REPOSITORY" --body -
+            fi
+          fi
+
+      - name: Commit and push metadata changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bedrock/client || true
+          git commit -m "Auto Bedrock Update $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "No changes to commit"
+          git push || echo "No changes to push"
