@@ -8,6 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -39,7 +41,7 @@ jobs:
             NEW_TOKENS=$(cat new_tokens.b64)
             if [ -n "$NEW_TOKENS" ]; then
               echo "Updating TOKENS secret"
-              echo "$NEW_TOKENS" | gh secret set TOKENS --repo "$GITHUB_REPOSITORY" --body -
+              echo "$NEW_TOKENS" | gh secret set TOKENS --repo "$GITHUB_REPOSITORY"
             fi
           fi
 
