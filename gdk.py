@@ -16,9 +16,11 @@ from xbox.webapi.authentication.manager import AuthenticationManager
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 from xbox.webapi.common.signed_session import SignedSession
 
+
 class MinecraftVersionType(StrEnum):
     RELEASE = "7792d9ce-355a-493c-afbd-768f4a77c3b0"
     PREVIEW = "98bd2335-9b01-4e4c-bd05-ccc01614078b"
+
 
 CLIENT_ID = "00000000402b5328"
 REDIRECT_URL = "https://login.live.com/oauth20_desktop.srf"
@@ -34,11 +36,17 @@ os.makedirs(BEDROCK_CLIENT_PREVIEW_PATH, exist_ok=True)
 
 IS_CI = os.getenv("GITHUB_ACTIONS") == "true"
 
+
 async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
     session = SignedSession()
     await session.__aenter__()
 
-    auth_mgr = AuthenticationManager(client_session=session, client_id=CLIENT_ID, client_secret=None, redirect_uri=REDIRECT_URL)
+    auth_mgr = AuthenticationManager(
+        client_session=session,
+        client_id=CLIENT_ID,
+        client_secret=None,
+        redirect_uri=REDIRECT_URL,
+    )
 
     tokens_env_b64 = os.getenv("TOKENS")
 
@@ -87,13 +95,19 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
 
     return auth_mgr, session
 
+
 async def getUpdateAuthorizationHeader(auth_mgr: AuthenticationManager) -> str:
     xsts_resp = await auth_mgr.request_xsts_token("http://update.xboxlive.com")
     uhs = xsts_resp.display_claims.xui[0]["uhs"]
     return f"XBL3.0 x={uhs};{xsts_resp.token}"
 
+
 async def getBasePackageContent(session: SignedSession, version_type: MinecraftVersionType, authorization_header: str):
-    return await session.get(f"https://packagespc.xboxlive.com/GetBasePackage/{version_type.value}", headers={"Authorization": authorization_header})
+    return await session.get(
+        f"https://packagespc.xboxlive.com/GetBasePackage/{version_type.value}",
+        headers={"Authorization": authorization_header},
+    )
+
 
 def parseMsixvcFilename(file_name: str) -> Optional[Dict[str, str]]:
     lower = file_name.lower()
@@ -109,6 +123,7 @@ def parseMsixvcFilename(file_name: str) -> Optional[Dict[str, str]]:
     family = parts[3]
     return {"app_id": app_id, "version": version, "arch": arch, "family": family}
 
+
 def parseXspFilename(file_name: str) -> Optional[Dict[str, str]]:
     lower = file_name.lower()
     if not lower.endswith(".xsp"):
@@ -121,6 +136,7 @@ def parseXspFilename(file_name: str) -> Optional[Dict[str, str]]:
         return None
     version, guid = base.split(".", 1)
     return {"target_version": version, "guid": guid}
+
 
 def buildDownloadUrls(pkg: Dict[str, Any]) -> List[str]:
     cdn_roots = pkg.get("CdnRootPaths", [])
@@ -135,14 +151,17 @@ def buildDownloadUrls(pkg: Dict[str, Any]) -> List[str]:
             urls.append(root.replace("assets2.xboxlive.com", "assets2.xboxlive.cn") + rel)
     return urls
 
-def resolveArchbyFileName(file_name: str) -> str:
-    if "_x64_" in file_name.lower():
+
+def resolveArchbyFilename(file_name: str) -> str:
+    lower = file_name.lower()
+    if "_x64_" in lower:
         return "x64"
-    if "_x86_" in file_name.lower():
+    if "_x86_" in lower:
         return "x86"
-    if "_arm_" in file_name.lower():
+    if "_arm_" in lower:
         return "arm"
     return "unknown"
+
 
 def buildVersionbyFilename(file_name: str) -> str:
     m = re.search(r"_(\d+\.\d+\.\d+)(\d{2})\.0_", file_name)
@@ -151,6 +170,7 @@ def buildVersionbyFilename(file_name: str) -> str:
     major = m.group(1)
     minor = m.group(2)
     return f"{major}.{minor}"
+
 
 def to_unix_timestamp(value: str) -> int | None:
     if not value:
@@ -164,6 +184,7 @@ def to_unix_timestamp(value: str) -> int | None:
         except Exception:
             return None
 
+
 def resolvePackage(pkg: Dict[str, Any]) -> Dict[str, Any]:
     file_name = pkg.get("FileName", "")
     size = pkg.get("FileSize", 0)
@@ -174,7 +195,7 @@ def resolvePackage(pkg: Dict[str, Any]) -> Dict[str, Any]:
     msix_info = parseMsixvcFilename(file_name)
     xsp_info = parseXspFilename(file_name)
     version_pretty = buildVersionbyFilename(file_name)
-    arch = resolveArchbyFileName(file_name)
+    arch = resolveArchbyFilename(file_name)
     modified_unix = to_unix_timestamp(modified)
 
     result: Dict[str, Any] = {
@@ -202,6 +223,7 @@ def resolvePackage(pkg: Dict[str, Any]) -> Dict[str, Any]:
 
     return result
 
+
 def write_packages_to_disk(root: Path, packages: List[Dict[str, Any]]) -> None:
     for pkg in packages:
         arch = pkg.get("arch", "unknown")
@@ -218,6 +240,63 @@ def write_packages_to_disk(root: Path, packages: List[Dict[str, Any]]) -> None:
         metadata_path = version_path.joinpath("metadata.json")
         with metadata_path.open("w", encoding="utf-8") as f:
             f.write(json.dumps(pkg, indent=4))
+
+
+def parse_version_number(ver: str) -> List[int]:
+    return [int(x) for x in re.findall(r"\d+", ver)]
+
+
+def collect_versions_by_arch(packages: List[Dict[str, Any]]) -> Dict[str, List[str]]:
+    buckets: Dict[str, set] = {
+        "x64": set(),
+        "x86": set(),
+        "arm": set(),
+    }
+    for pkg in packages:
+        arch = (pkg.get("arch") or "").lower()
+        if arch not in buckets:
+            continue
+        v = pkg.get("version")
+        if v:
+            buckets[arch].add(v)
+    out: Dict[str, List[str]] = {}
+    for arch, s in buckets.items():
+        lst = sorted(list(s), key=parse_version_number)
+        out[arch] = lst
+    return out
+
+
+def latest_by_arch(arch_map: Dict[str, List[str]]) -> Dict[str, str]:
+    result: Dict[str, str] = {}
+    for arch in ("x64", "x86", "arm"):
+        lst = arch_map.get(arch, [])
+        result[arch] = lst[-1] if lst else ""
+    return result
+
+
+def write_versions_json(
+    release_by_arch: Dict[str, List[str]],
+    preview_by_arch: Dict[str, List[str]],
+    path: Path,
+) -> None:
+    data = {
+        "latest": {
+            "release": latest_by_arch(release_by_arch),
+            "preview": latest_by_arch(preview_by_arch),
+        },
+        "releases": {
+            "x64": release_by_arch.get("x64", []),
+            "x86": release_by_arch.get("x86", []),
+            "arm": release_by_arch.get("arm", []),
+        },
+        "previews": {
+            "x64": preview_by_arch.get("x64", []),
+            "x86": preview_by_arch.get("x86", []),
+            "arm": preview_by_arch.get("arm", []),
+        },
+    }
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
 
 
 async def main():
@@ -247,8 +326,14 @@ async def main():
         write_packages_to_disk(BEDROCK_CLIENT_RELEASE_PATH, release_resolved)
         write_packages_to_disk(BEDROCK_CLIENT_PREVIEW_PATH, preview_resolved)
 
+        release_by_arch = collect_versions_by_arch(release_resolved)
+        preview_by_arch = collect_versions_by_arch(preview_resolved)
+        versions_json_path = BEDROCK_CLIENT_PATH / "versions.json"
+        write_versions_json(release_by_arch, preview_by_arch, versions_json_path)
+
     finally:
         await session.__aexit__(None, None, None)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
