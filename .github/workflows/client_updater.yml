@@ -29,7 +29,7 @@ jobs:
           TOKENS_OUT_FILE: new_tokens.b64
           PYTHONUNBUFFERED: "1"
         run: |
-          python main.py
+          python gdk.py
 
       - name: Update TOKENS secret if file exists
         env:
