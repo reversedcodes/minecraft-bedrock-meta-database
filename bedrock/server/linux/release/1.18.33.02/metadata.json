@@ -1,0 +1,11 @@
+{
+    "file_name": "bedrock-server-1.18.33.02.zip",
+    "file_size": 76100826,
+    "version": "1.18.33.02",
+    "url": "https://www.minecraft.net/bedrockdedicatedserver/bin-linux/bedrock-server-1.18.33.02.zip",
+    "os": "linux",
+    "release_type": "release",
+    "last_modified_unix": 1723151293,
+    "file_hash": "a517ad2b9d9bfab51f1911c12c2b9510d0a19fe23fb530ed01f6edba43cc30cc",
+    "file_executable_hash": "dc26c763fab7a6e497d2a0c7473a94a0582fba95fad56c683b357b521f7c4430"
+}

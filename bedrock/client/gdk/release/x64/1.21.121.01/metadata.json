@@ -13,6 +13,7 @@
         "http://assets2.xboxlive.com/15/7bf19a96-c045-4b55-b96e-faa32604781a/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.21.12101.0.7590152e-2320-4e06-9e85-8e458890e1e7/MICROSOFT.MINECRAFTUWP_1.21.12101.0_x64__8wekyb3d8bbwe.msixvc",
         "http://assets2.xboxlive.cn/15/7bf19a96-c045-4b55-b96e-faa32604781a/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.21.12101.0.7590152e-2320-4e06-9e85-8e458890e1e7/MICROSOFT.MINECRAFTUWP_1.21.12101.0_x64__8wekyb3d8bbwe.msixvc"
     ],
+    "file_hash": "2f28ced754a7005db836fc535f2a95c128fe8a2cabb5e87e9ac1ddeeb36558ef",
     "type": "full",
     "app_id": "MICROSOFT.MINECRAFTUWP",
     "version_raw": "1.21.12101.0",
