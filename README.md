@@ -1,7 +1,6 @@
 # 🧱 Minecraft Bedrock Metadata Database
 
 An automated updater for Minecraft Bedrock clients and servers — and more.
-Runs automatically every day at 17:00 and 20:00 (German time) to keep all builds up to date.
 
 ---
 
