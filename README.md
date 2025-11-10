@@ -1,25 +1,17 @@
 # 🧱 Minecraft Bedrock Metadata Database
 
-An auto-updater for Minecraft Bedrock (GDK) builds using the official Xbox Live Update API.  
-Runs every **12 hours** via GitHub Actions and stores all versions separately by architecture.
-
----
-
-## ⚙️ Features
-- Fetches metadata directly from `packagespc.xboxlive.com`
-- Automatically refreshes Xbox OAuth tokens
-- Stores all versions sorted by architecture (x64, x86, arm)
-- Generates version JSON files for simple data access
+An automated updater for Minecraft Bedrock clients and servers — and more.  
+Runs automatically every 12 hours to keep all builds up to date.
 
 ---
 
 ## 📦 Fetching Data
 
 ```bash
-# client example
+# Client example
 curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/gdk/{release_type}/{arch}/{version}/metadata.json
 
-# version index
+# Version index
 curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/gdk/versions.json
 ```
 
@@ -29,11 +21,21 @@ curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-d
 
 ```
 bedrock/
- └── client/
-      ├── release/x64/<version>/metadata.json
-      ├── preview/arm/<version>/metadata.json
+ ├── client/
+ │    ├── gdk/
+ │    │    ├── release/<arch>/<version>/metadata.json
+ │    │    ├── preview/<arch>/<version>/metadata.json
+ │    │    └── versions.json
+ │    └── uwp/
+ │    │    ├── release/<arch>/<version>/metadata.json
+ │    │    ├── preview/<arch>/<version>/metadata.json
+ │         └── versions.json
+ └── server/
+      │── windows/<version>/metadata.json
+      │── linux/<version>/metadata.json
       └── versions.json
 ```
+
 ---
 
 ## 📜 License
