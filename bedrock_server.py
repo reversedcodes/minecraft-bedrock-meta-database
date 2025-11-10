@@ -36,18 +36,15 @@ os.makedirs(BEDROCK_SERVER_PREVIEW_PATH_WINDOWS, exist_ok=True)
 os.makedirs(BEDROCK_SERVER_RELEASE_PATH_LINUX, exist_ok=True)
 os.makedirs(BEDROCK_SERVER_PREVIEW_PATH_LINUX, exist_ok=True)
 
-
 class ReleaseType(str, Enum):
     RELEASE = "release"
     PREVIEW = "preview"
     JAVA = "java"
 
-
 class OS(str, Enum):
     WINDOWS = "windows"
     LINUX = "linux"
     ANY = "any"
-
 
 @dataclass(frozen=True)
 class DownloadEntry:
@@ -76,7 +73,6 @@ class DownloadEntry:
             "file_hash": None,
             "file_executable_hash": None,
         }
-
 
 class BedrockAPI:
     BASE_URL = "https://net-secondary.web.minecraft-services.net/api/v1.0/download/links"
@@ -123,14 +119,12 @@ class BedrockAPI:
         m2 = re.search(r"/(\d+(?:\.\d+){1,3})", url)
         return m2.group(1) if m2 else None
 
-
 def sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(chunk_size), b""):
             h.update(chunk)
     return h.hexdigest()
-
 
 def compute_hashes_for_entry(entry: DownloadEntry) -> Tuple[Optional[int], Optional[int], Optional[str], Optional[str]]:
     head = requests.head(entry.url, timeout=20, headers=HEADERS)
@@ -169,12 +163,10 @@ def compute_hashes_for_entry(entry: DownloadEntry) -> Tuple[Optional[int], Optio
 
     return file_size, last_modified_unix, file_hash, exe_hash
 
-
 def metadata_exists(entry: DownloadEntry) -> bool:
     version = entry.version or "unknown"
     path = BEDROCK_SERVER_PATH / entry.os.value / entry.release_type.value / version / "metadata.json"
     return path.is_file()
-
 
 def save_metadata(entry: DownloadEntry, meta: dict):
     base = BEDROCK_SERVER_PATH / entry.os.value / entry.release_type.value
@@ -183,15 +175,11 @@ def save_metadata(entry: DownloadEntry, meta: dict):
     with (version_dir / "metadata.json").open("w", encoding="utf-8") as f:
         json.dump(meta, f, indent=4, ensure_ascii=False)
 
-
 def parse_version_number(ver: str) -> List[int]:
     return [int(x) for x in re.findall(r"\d+", ver)]
 
-
 def sort_versions(versions: set[str]) -> List[str]:
-    # neueste Version zuerst
     return sorted(list(versions), key=parse_version_number, reverse=True)
-
 
 def collect_versions_from_disk() -> tuple[dict[str, set[str]], dict[str, set[str]]]:
     release_versions = {"windows": set(), "linux": set()}

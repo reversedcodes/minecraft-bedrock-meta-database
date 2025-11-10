@@ -34,7 +34,6 @@ HEADERS = {
 }
 
 IS_CI = os.getenv("GITHUB_ACTIONS") == "true"
-
 TOKENS_FILE = Path("tokens.json")
 
 os.makedirs(BEDROCK_CLIENT_RELEASE_PATH, exist_ok=True)
@@ -44,12 +43,7 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
     session = SignedSession()
     await session.__aenter__()
 
-    auth_mgr = AuthenticationManager(
-        client_session=session,
-        client_id="00000000402b5328",
-        client_secret=None,
-        redirect_uri="https://login.live.com/oauth20_desktop.srf",
-    )
+    auth_mgr = AuthenticationManager(client_session=session, client_id="00000000402b5328", client_secret=None, redirect_uri="https://login.live.com/oauth20_desktop.srf")
 
     tokens_env_b64 = os.getenv("TOKENS")
 
@@ -90,6 +84,7 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
             f.write(auth_mgr.oauth.model_dump_json())
 
     tokens_out_file = os.getenv("TOKENS_OUT_FILE")
+
     if IS_CI and tokens_out_file:
         new_json = auth_mgr.oauth.model_dump_json()
         new_b64 = base64.b64encode(new_json.encode("utf-8")).decode("ascii")
@@ -253,10 +248,9 @@ def collect_versions_by_arch(packages: List[Dict[str, Any]]) -> Dict[str, List[s
             buckets[arch].add(v)
     out: Dict[str, List[str]] = {}
     for arch, s in buckets.items():
-        lst = sorted(list(s), key=parse_version_number, reverse=True)
+        lst = sorted(list(s), key=parse_version_number)
         out[arch] = lst
     return out
-
 
 def latest_by_arch(arch_map: Dict[str, List[str]]) -> Dict[str, str]:
     result: Dict[str, str] = {}
@@ -265,6 +259,28 @@ def latest_by_arch(arch_map: Dict[str, List[str]]) -> Dict[str, str]:
         result[arch] = lst[0] if lst else ""
     return result
 
+def collect_versions_from_disk(root: Path) -> Dict[str, set]:
+    versions: Dict[str, set] = {
+        "x64": set(),
+        "x86": set(),
+        "arm": set(),
+    }
+    for arch in ("x64", "x86", "arm"):
+        arch_path = root / arch
+        if not arch_path.is_dir():
+            continue
+        for child in arch_path.iterdir():
+            if child.is_dir():
+                versions[arch].add(child.name)
+    return versions
+
+def merge_versions(existing: Dict[str, set], new: Dict[str, List[str]]) -> Dict[str, List[str]]:
+    result: Dict[str, List[str]] = {}
+    for arch in ("x64", "x86", "arm"):
+        s = set(existing.get(arch, set()))
+        s.update(new.get(arch, []))
+        result[arch] = sorted(list(s), key=parse_version_number, reverse=True)
+    return result
 
 def write_versions_json(release_by_arch: Dict[str, List[str]], preview_by_arch: Dict[str, List[str]], path: Path) -> None:
     data = {
@@ -286,9 +302,9 @@ def write_versions_json(release_by_arch: Dict[str, List[str]], preview_by_arch: 
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
-
 def sha256_from_url(url: str) -> Optional[str]:
-
+    if not url:
+        return None
     try:
         with requests.get(url, stream=True, timeout=60, headers=HEADERS) as r:
             r.raise_for_status()
@@ -300,6 +316,17 @@ def sha256_from_url(url: str) -> Optional[str]:
         return h.hexdigest()
     except Exception as e:
         print(f"Failed to hash {url}: {e}")
+        return None
+
+def load_existing_metadata(root: Path, arch: str, version: str) -> Optional[Dict[str, Any]]:
+    meta_path = root / arch / version / "metadata.json"
+    if not meta_path.is_file():
+        return None
+    try:
+        with meta_path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Failed to read metadata {meta_path}: {e}")
         return None
 
 async def main():
@@ -327,11 +354,29 @@ async def main():
                     preview_resolved.append(resolvePackage(pkg))
 
         for pkg in release_resolved:
+            arch = (pkg.get("arch") or "").lower()
+            version = pkg.get("version") or "unknown"
+
+            existing = load_existing_metadata(BEDROCK_CLIENT_RELEASE_PATH, arch, version)
+
+            if existing and existing.get("file_hash"):
+                pkg["file_hash"] = existing["file_hash"]
+                continue
+
             urls = pkg.get("urls") or []
             if urls:
                 pkg["file_hash"] = sha256_from_url(urls[0])
 
         for pkg in preview_resolved:
+            arch = (pkg.get("arch") or "").lower()
+            version = pkg.get("version") or "unknown"
+
+            existing = load_existing_metadata(BEDROCK_CLIENT_PREVIEW_PATH, arch, version)
+
+            if existing and existing.get("file_hash"):
+                pkg["file_hash"] = existing["file_hash"]
+                continue
+
             urls = pkg.get("urls") or []
             if urls:
                 pkg["file_hash"] = sha256_from_url(urls[0])
@@ -339,8 +384,15 @@ async def main():
         write_packages_to_disk(BEDROCK_CLIENT_RELEASE_PATH, release_resolved)
         write_packages_to_disk(BEDROCK_CLIENT_PREVIEW_PATH, preview_resolved)
 
-        release_by_arch = collect_versions_by_arch(release_resolved)
-        preview_by_arch = collect_versions_by_arch(preview_resolved)
+        existing_release = collect_versions_from_disk(BEDROCK_CLIENT_RELEASE_PATH)
+        existing_preview = collect_versions_from_disk(BEDROCK_CLIENT_PREVIEW_PATH)
+
+        release_from_api = collect_versions_by_arch(release_resolved)
+        preview_from_api = collect_versions_by_arch(preview_resolved)
+
+        release_by_arch = merge_versions(existing_release, release_from_api)
+        preview_by_arch = merge_versions(existing_preview, preview_from_api)
+
         versions_json_path = BEDROCK_CLIENT_PATH / "versions.json"
         write_versions_json(release_by_arch, preview_by_arch, versions_json_path)
 
