@@ -288,8 +288,6 @@ def write_versions_json(release_by_arch: Dict[str, List[str]], preview_by_arch: 
 
 
 def sha256_from_url(url: str) -> Optional[str]:
-    if not url or IS_CI:
-        return None
 
     try:
         with requests.get(url, stream=True, timeout=60, headers=HEADERS) as r:

@@ -133,9 +133,6 @@ def sha256_file(path: Path, chunk_size: int = 1024 * 1024) -> str:
 
 
 def compute_hashes_for_entry(entry: DownloadEntry) -> Tuple[Optional[int], Optional[int], Optional[str], Optional[str]]:
-    if not entry.url or IS_CI:
-        return None, None, None, None
-
     head = requests.head(entry.url, timeout=20, headers=HEADERS)
     file_size = int(head.headers.get("Content-Length", "0") or 0)
     lm_header = head.headers.get("Last-Modified")
