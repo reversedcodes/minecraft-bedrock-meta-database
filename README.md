@@ -17,10 +17,10 @@ Runs every **12 hours** via GitHub Actions and stores all versions separately by
 
 ```bash
 # client example
-curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/{release_type}/{arch}/{version}/metadata.json
+curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/gdk/{release_type}/{arch}/{version}/metadata.json
 
 # version index
-curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/versions.json
+curl -s https://raw.githubusercontent.com/reversedcodes/minecraft-bedrock-meta-database/refs/heads/main/bedrock/client/gdk/versions.json
 ```
 
 ---
