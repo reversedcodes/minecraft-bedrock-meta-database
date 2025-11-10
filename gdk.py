@@ -26,7 +26,7 @@ CLIENT_ID = "00000000402b5328"
 REDIRECT_URL = "https://login.live.com/oauth20_desktop.srf"
 
 ROOT_PATH = Path(__file__).parent
-BEDROCK_CLIENT_PATH = ROOT_PATH / "bedrock" / "client"
+BEDROCK_CLIENT_PATH = ROOT_PATH / "bedrock" / "client" / "gdk"
 BEDROCK_CLIENT_RELEASE_PATH = BEDROCK_CLIENT_PATH / "release"
 BEDROCK_CLIENT_PREVIEW_PATH = BEDROCK_CLIENT_PATH / "preview"
 TOKENS_FILE = Path("tokens.json")
