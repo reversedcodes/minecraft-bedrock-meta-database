@@ -2,7 +2,7 @@ name: Bedrock Updater
 
 on:
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "0 17,20 * * *"
   workflow_dispatch:
 
 jobs:
