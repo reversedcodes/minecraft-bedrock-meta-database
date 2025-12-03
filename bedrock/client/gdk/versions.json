@@ -6,7 +6,7 @@
             "arm": ""
         },
         "preview": {
-            "x64": "1.21.130.28",
+            "x64": "Microsoft.MinecraftWindowsBeta_1.26.24.0_x64__8wekyb3d8bbwe.msixvc",
             "x86": "",
             "arm": ""
         }
@@ -23,6 +23,7 @@
     },
     "previews": {
         "x64": [
+            "Microsoft.MinecraftWindowsBeta_1.26.24.0_x64__8wekyb3d8bbwe.msixvc",
             "1.21.130.28",
             "1.21.130.27",
             "1.21.130.26"
