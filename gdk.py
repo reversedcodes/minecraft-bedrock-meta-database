@@ -154,13 +154,36 @@ def resolveArchbyFilename(file_name: str) -> str:
         return "arm"
     return "unknown"
 
+def parseBuildVersion(version_str: str) -> List[int]:
+    return [int(x) for x in version_str.split(".")]
+
 def buildVersionbyFilename(file_name: str) -> str:
-    m = re.search(r"_(\d+\.\d+\.\d+)(\d{2})\.0_", file_name)
-    if not m:
-        return file_name
-    major = m.group(1)
-    minor = m.group(2)
-    return f"{major}.{minor}"
+    m_new = re.search(r"_(\d+\.\d+\.\d+\.\d+)_", file_name)
+
+    if m_new:
+        version_str_new = m_new.group(1)
+        try:
+            version_parts = parseBuildVersion(version_str_new)
+        except Exception:
+            version_parts = []
+
+        if len(version_parts) >= 2:
+            version_yy = version_parts[1]
+            
+            yy = datetime.now().year % 100
+            yyNext = (yy + 1) % 100
+
+            if version_yy == yy or version_yy == yyNext:
+                return version_str_new
+        
+    m_old = re.search(r"_(\d+\.\d+\.\d+)(\d{2})\.0_", file_name)
+
+    if m_old:
+        major = m_old.group(1)
+        minor = m_old.group(2)
+        return f"{major}.{minor}"
+    
+    return file_name
 
 def to_unix_timestamp(value: str) -> int | None:
     if not value:

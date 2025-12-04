@@ -1,19 +1,18 @@
 {
     "latest": {
         "release": {
-            "x64": "1.21.124.02",
+            "x64": "",
             "x86": "",
             "arm": ""
         },
         "preview": {
-            "x64": "Microsoft.MinecraftWindowsBeta_1.26.24.0_x64__8wekyb3d8bbwe.msixvc",
+            "x64": "",
             "x86": "",
             "arm": ""
         }
     },
     "releases": {
         "x64": [
-            "1.21.124.02",
             "1.21.123.02",
             "1.21.122.01",
             "1.21.121.01"
@@ -23,7 +22,6 @@
     },
     "previews": {
         "x64": [
-            "Microsoft.MinecraftWindowsBeta_1.26.24.0_x64__8wekyb3d8bbwe.msixvc",
             "1.21.130.28",
             "1.21.130.27",
             "1.21.130.26"
