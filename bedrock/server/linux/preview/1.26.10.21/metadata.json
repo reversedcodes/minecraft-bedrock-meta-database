@@ -1,0 +1,11 @@
+{
+    "file_name": "bedrock-server-1.26.10.21.zip",
+    "file_size": 88016654,
+    "version": "1.26.10.21",
+    "url": "https://www.minecraft.net/bedrockdedicatedserver/bin-linux-preview/bedrock-server-1.26.10.21.zip",
+    "os": "linux",
+    "release_type": "preview",
+    "last_modified_unix": 1770138150,
+    "file_hash": "a3875e878f6918dad4ca93cc7c489aa1a33c86bf3ecbc76206ff4c56ba1c3ef7",
+    "file_executable_hash": "47ebc0bbae7f403a306b5c6353db1ef94f3341bd21217f52b9ad1249f45d30cc"
+}
