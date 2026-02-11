@@ -1,0 +1,21 @@
+{
+    "content_id": "7792d9ce-355a-493c-afbd-768f4a77c3b0",
+    "version_id": "1.26.2.0.93f6aff7-7162-4796-b653-0c6a476ba581",
+    "file_name": "MICROSOFT.MINECRAFTUWP_1.26.2.0_x64__8wekyb3d8bbwe.msixvc",
+    "file_size": 1771024384,
+    "version": "1.26.2.0",
+    "modified_date": "2026-02-09T17:35:25+00:00",
+    "modified_unix": 1770658525,
+    "arch": "x64",
+    "urls": [
+        "http://assets1.xboxlive.com/1/d107af1a-5006-4455-b71a-b7395465a0b9/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.2.0.7b0bec04-ae0d-4136-82ec-29bb9751adc7/MICROSOFT.MINECRAFTUWP_1.26.2.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets1.xboxlive.cn/1/d107af1a-5006-4455-b71a-b7395465a0b9/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.2.0.7b0bec04-ae0d-4136-82ec-29bb9751adc7/MICROSOFT.MINECRAFTUWP_1.26.2.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets2.xboxlive.com/1/d107af1a-5006-4455-b71a-b7395465a0b9/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.2.0.7b0bec04-ae0d-4136-82ec-29bb9751adc7/MICROSOFT.MINECRAFTUWP_1.26.2.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets2.xboxlive.cn/1/d107af1a-5006-4455-b71a-b7395465a0b9/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.2.0.7b0bec04-ae0d-4136-82ec-29bb9751adc7/MICROSOFT.MINECRAFTUWP_1.26.2.0_x64__8wekyb3d8bbwe.msixvc"
+    ],
+    "file_hash": "a7890a4404dba1c053c901164859f9bed028f4614031fcbb3c94e60ec6916419",
+    "type": "full",
+    "app_id": "MICROSOFT.MINECRAFTUWP",
+    "version_raw": "1.26.2.0",
+    "family": "8wekyb3d8bbwe"
+}
