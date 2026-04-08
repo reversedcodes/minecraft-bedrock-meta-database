@@ -1,0 +1,21 @@
+{
+    "content_id": "98bd2335-9b01-4e4c-bd05-ccc01614078b",
+    "version_id": "1.26.2026.0.35d5a6c7-1fd3-4e58-8143-26c0d0fc352b",
+    "file_name": "Microsoft.MinecraftWindowsBeta_1.26.2026.0_x64__8wekyb3d8bbwe.msixvc",
+    "file_size": 1992417280,
+    "version": "1.26.2026.0",
+    "modified_date": "2026-04-07T21:34:33+00:00",
+    "modified_unix": 1775597673,
+    "arch": "x64",
+    "urls": [
+        "http://assets1.xboxlive.com/14/effc0e3a-5070-468a-8212-733e7fb4bec5/98bd2335-9b01-4e4c-bd05-ccc01614078b/1.26.2026.0.f5da1a06-3175-4b56-be3b-971d2f6ba90a/Microsoft.MinecraftWindowsBeta_1.26.2026.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets1.xboxlive.cn/14/effc0e3a-5070-468a-8212-733e7fb4bec5/98bd2335-9b01-4e4c-bd05-ccc01614078b/1.26.2026.0.f5da1a06-3175-4b56-be3b-971d2f6ba90a/Microsoft.MinecraftWindowsBeta_1.26.2026.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets2.xboxlive.com/14/effc0e3a-5070-468a-8212-733e7fb4bec5/98bd2335-9b01-4e4c-bd05-ccc01614078b/1.26.2026.0.f5da1a06-3175-4b56-be3b-971d2f6ba90a/Microsoft.MinecraftWindowsBeta_1.26.2026.0_x64__8wekyb3d8bbwe.msixvc",
+        "http://assets2.xboxlive.cn/14/effc0e3a-5070-468a-8212-733e7fb4bec5/98bd2335-9b01-4e4c-bd05-ccc01614078b/1.26.2026.0.f5da1a06-3175-4b56-be3b-971d2f6ba90a/Microsoft.MinecraftWindowsBeta_1.26.2026.0_x64__8wekyb3d8bbwe.msixvc"
+    ],
+    "file_hash": "232651e2734a129fed4c416756fe00fb1a96ca070f9c2db4c4e97280c97c4901",
+    "type": "full",
+    "app_id": "Microsoft.MinecraftWindowsBeta",
+    "version_raw": "1.26.2026.0",
+    "family": "8wekyb3d8bbwe"
+}
