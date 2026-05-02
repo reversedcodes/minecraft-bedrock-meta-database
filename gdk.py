@@ -252,9 +252,6 @@ def save_package(pkg: Dict[str, Any], release_type: str):
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / f"{version}.json"
 
-    patch_versions_json(release_type, version)
-
-
     if out_file.is_file():
         with out_file.open("r", encoding="utf-8") as f:
             full_data = json.load(f)
