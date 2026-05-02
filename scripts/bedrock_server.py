@@ -7,19 +7,19 @@ import zipfile
 import requests
 import logging
 
+from constant import ROOT_PATH, logging
 from email.utils import parsedate_to_datetime
 from typing import Optional, Tuple, Dict
 from pathlib import Path
 
 HEADERS = {"User-Agent": "TorchCS/1.1"}
 
-SERVER_PATH = Path(__file__).parent / "bedrock" / "server"
+SERVER_PATH = ROOT_PATH / "bedrock" / "server"
 SERVER_RELEASE_PATH = SERVER_PATH / "release"
 SERVER_PREVIEW_PATH = SERVER_PATH / "preview"
 SERVER_VERSIONS_JSON_PATH = SERVER_PATH / "versions.json"
 
 logger = logging.getLogger("BedrockServerFetcher")
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 def compute_hashes(url: str) -> Tuple[int, Optional[int], str, Optional[str]]:
     logger.info(f"Downloading & Hashing: {url}")

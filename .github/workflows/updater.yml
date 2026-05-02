@@ -31,11 +31,11 @@ jobs:
           TOKENS_OUT_FILE: new_tokens.b64
           PYTHONUNBUFFERED: "1"
         run: |
-          python gdk.py
+          python scripts/gdk.py
 
       - name: Run Bedrock Server Updater
         run: |
-          python bedrock_server.py
+          python scripts/bedrock_server.py
 
       - name: Update TOKENS secret if file exists
         env:

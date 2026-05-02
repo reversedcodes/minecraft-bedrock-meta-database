@@ -12,6 +12,7 @@ from xbox.webapi.authentication.manager import AuthenticationManager
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 from xbox.webapi.common.signed_session import SignedSession
 from typing import List, Optional, Tuple, Dict, Any
+from constant import ROOT_PATH, logging
 from email.utils import parsedate_to_datetime
 from httpx import HTTPStatusError
 from datetime import datetime
@@ -19,7 +20,6 @@ from datetime import datetime
 from pathlib import Path
 from enum import StrEnum
 
-ROOT_PATH = Path(__file__).parent
 CLIENT_PATH = ROOT_PATH / "bedrock" / "client"
 GDK_RELEASE_PATH = CLIENT_PATH / "release" / "gdk"
 GDK_PREVIEW_PATH = CLIENT_PATH / "preview" / "gdk"
@@ -30,7 +30,6 @@ HEADERS = {"User-Agent": "TorchCS/1.1"}
 TOKENS_FILE = Path("tokens.json")
 
 logger = logging.getLogger("BedrockClientFetcher")
-logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 class MinecraftVersionType(StrEnum):
     RELEASE = "7792d9ce-355a-493c-afbd-768f4a77c3b0"
