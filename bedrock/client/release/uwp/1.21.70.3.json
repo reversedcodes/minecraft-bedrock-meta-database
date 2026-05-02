@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.7003.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 860360137,
+                    "version": "1.21.70.3",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1741662273,
+                    "file_hash": "699785d6658ba9a4c4a530de02724a8dd709d204a58930af83ea50fdf889ab9c",
+                    "file_executable_hash": "f6db5d1932fc4581e987045a3997e5ca87d466b5201c152a664397c6ce57a01d"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.7003.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 843585568,
+                    "version": "1.21.70.3",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1741662273,
+                    "file_hash": "9c71872bd0a270128da69c66f3e0814454d1dc3af1e3b1ac3588405f810317a4",
+                    "file_executable_hash": "b4bb8023d6c8584018d9fdef20b0c36c15cfcea766cd88bf0192fafaf17a9b8b"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.7003.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 837105738,
+                    "version": "1.21.70.3",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1741662273,
+                    "file_hash": "cb123c50c24301fe6de29893439be11c50de7f77f8a9877b85707bd570b75880",
+                    "file_executable_hash": "58276544c0c246545929e9a2710c9f0dbb3c5de2f28aa722fca1b45417fceeba"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3203.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 912481257,
+                    "version": "1.20.32.3",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1696524737,
+                    "file_hash": "a08df45ca83f329d6ca8db59a3cb830207061a6ba371243ceea717551b88ff2c",
+                    "file_executable_hash": "7a4c70c9d0ffe2ecdbe2fe785fa14da3c4400cc7572bdb2eb78ba34b49a90037"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3203.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 900865764,
+                    "version": "1.20.32.3",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1696524737,
+                    "file_hash": "e0c072d3ee64015eea8f65883997fdea350f91e9bd189f8682d43ac2381a6f96",
+                    "file_executable_hash": "5ccd31ba3e09a90ccad738a6556490182901a845d508eb324b9f3db27c555283"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3203.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 902833725,
+                    "version": "1.20.32.3",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1696524737,
+                    "file_hash": "e95f266e6cc04c727bc67a58a2f7d924cfe18bccf98bec892edf20b72fdda709",
+                    "file_executable_hash": "b11368181309bf4de2f15c6d099a6827ab90f43b4add564b94d50481ab83095b"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

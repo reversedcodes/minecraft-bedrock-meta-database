@@ -1,0 +1,78 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 593129531,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007057,
+                    "file_hash": "4232ecc6feadbae0e87cb9006b48f817205c7503e03ad04707ec13a8a9e956ea",
+                    "file_executable_hash": "258efefcb3e5fffe4f88925ea7689bb95f72a433fb7b143e7a710d1cff51d00d"
+                },
+                "eappx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.70_x64__8wekyb3d8bbwe.EAppx",
+                    "file_size": 796091042,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007057,
+                    "file_hash": "3609b6613c21bc918be4499ee924cff3148bd4f96a85f25d5cdd67fa05e2685b",
+                    "file_executable_hash": "3609b6613c21bc918be4499ee924cff3148bd4f96a85f25d5cdd67fa05e2685b"
+                }
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 543225559,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007056,
+                    "file_hash": "5188d65c30cdd1fc2c8c5ae0f1f3c52619df1b00a19f3007e8c2311f45bda208",
+                    "file_executable_hash": "2e59866c70c1b23f896bbf4d0a8ff7dfbaad783f1fdad50db18df76235c7dcb7"
+                },
+                "eappx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.70_x86__8wekyb3d8bbwe.EAppx",
+                    "file_size": 664255100,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007056,
+                    "file_hash": "635b58f31ed469b357862a796986839b0a0b79b78f7a053be31c3b09280b04ab",
+                    "file_executable_hash": "635b58f31ed469b357862a796986839b0a0b79b78f7a053be31c3b09280b04ab"
+                }
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 582921937,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007057,
+                    "file_hash": "51b2f014adda5de275f2fff92567f9d49a213fe4bfdb084474d2b090bd849124",
+                    "file_executable_hash": "a7dbfcfba4da2d748af323cf58f1ec51588bc2dc4e1ec81196dd9833f389d0ee"
+                },
+                "eappx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.17.4006.70_arm__8wekyb3d8bbwe.EAppx",
+                    "file_size": 761177523,
+                    "version": "1.17.40.6",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1634007057,
+                    "file_hash": "2a8ce17faa60f74a426203fb2ca76b7e8e978db5abc351c3ad0efbf261e3e1e8",
+                    "file_executable_hash": "2a8ce17faa60f74a426203fb2ca76b7e8e978db5abc351c3ad0efbf261e3e1e8"
+                }
+            }
+        }
+    }
+}

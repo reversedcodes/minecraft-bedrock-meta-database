@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3002.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 912463831,
+                    "version": "1.20.30.2",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1695140874,
+                    "file_hash": "e22dd08df14423e9f1718561de42a42fe063c44c104fdc1b7ae7a75df66196fe",
+                    "file_executable_hash": "383043406e9568340fa6240c48ca998c8d6f10b163bcc0ec51d1e7f7f762c00e"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3002.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 900870187,
+                    "version": "1.20.30.2",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1695140874,
+                    "file_hash": "d5282df988fd6831d0beb9b772076933e6185a86adc952d2fa33d5dbc9e4f348",
+                    "file_executable_hash": "1c0223d8586b48c2f271c4da82f8e14be461e07f3c53d712bb10dbd469fa552e"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.20.3002.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 902896033,
+                    "version": "1.20.30.2",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1695140874,
+                    "file_hash": "18bd02adb34208b0699a422896b29d69b6ea5a02493aaf2295a81b2d8262b243",
+                    "file_executable_hash": "59319491bcbe70d1b39cd37f3d35985bf4d710a2fffc2786829c13f17641673e"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

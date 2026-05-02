@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.8101.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 839937443,
+                    "version": "1.19.81.1",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1682544474,
+                    "file_hash": "b3b00e668b25ecf4f088bbc65b3af5801f780f6eb9707f9f1ff59a08099178cb",
+                    "file_executable_hash": "1f8e7d05477a41d10a7bc95127e1c8d197729e6bee4f49cae7407fd45c37f540"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.8101.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 828910333,
+                    "version": "1.19.81.1",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1682544474,
+                    "file_hash": "12737390f92d19b2f4ff2632e7098a2111152cc701d3e2955042dd544b2bb32a",
+                    "file_executable_hash": "9da6cc34ce9016aa833dfe4064a05972873271395ca27d3284265be86c2ebd2d"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.8101.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 831337706,
+                    "version": "1.19.81.1",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1682544474,
+                    "file_hash": "47db3ce93592805bc8b1745c3a9d2b0a527793d68637fb09a0dd6d974cabd72f",
+                    "file_executable_hash": "afb350938ec345d723bf36123a02efcef366ebf8b50733eb57a4be7d6dc17c0d"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

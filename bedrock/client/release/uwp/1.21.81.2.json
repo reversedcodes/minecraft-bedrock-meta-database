@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.8102.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 885284488,
+                    "version": "1.21.81.2",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1747241009,
+                    "file_hash": "2c43e1618185c6102affda4ad5b769702791aa24840adeb62fbd1f649729c2db",
+                    "file_executable_hash": "7abc6c22cfffbee46b64863435c055ff78b3416dc53fa42cbef38cb0902baf30"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.8102.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 867525035,
+                    "version": "1.21.81.2",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1747241009,
+                    "file_hash": "ee56b929b786711f6ef353c09b8581ee8f8a82db33cad8a116ebdb0904e10c6e",
+                    "file_executable_hash": "87faf3910a8e3d0e42cfbf3b082aa62d8313137ca7bcca5f0e13fa98ffda17f2"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.21.8102.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 860705087,
+                    "version": "1.21.81.2",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1747241009,
+                    "file_hash": "b995ff0226d51f23c82e67362d62252d73a9708624485b7845ca97d4c4306406",
+                    "file_executable_hash": "66c523c0f8f11b074974c6456627896a97b215913e659716814221ea350792cc"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.2.203.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 159254272,
+                    "version": "1.2.2.3",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1506730725,
+                    "file_hash": "291344b52c5c6abc98da27a5544295d3577b7220574629ba5eaf48773b5fd886",
+                    "file_executable_hash": "cca0889503232e27cb2fd4492016ac798b273a2c9509875a0b5e30527af6a323"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.2.203.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 156735280,
+                    "version": "1.2.2.3",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1506730725,
+                    "file_hash": "758490cd9fb4854c3f2ace4d99e4a9b024e7470983329f8ef2618f854f205780",
+                    "file_executable_hash": "aa5ab55923dcdd64ad1caf2b44ee3a60904af5b380a917a3f898f7f8b2b324f9"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.2.203.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 60721275,
+                    "version": "1.2.2.3",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1506730725,
+                    "file_hash": "c53eb5639f9979eded1f0986a5d90b08a2c3348e119f727c54e2c81474c6c3a7",
+                    "file_executable_hash": "77a3c7cc55b8f4b7bb092c6ff1b83af28449b26249fdcbab606e9f9964ad1c5d"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

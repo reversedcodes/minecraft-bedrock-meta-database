@@ -1,0 +1,48 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.6003.0_x64__8wekyb3d8bbwe.Appx",
+                    "file_size": 825774541,
+                    "version": "1.19.60.3",
+                    "revision": 1,
+                    "arch": "x64",
+                    "release_type": "release",
+                    "last_modified_unix": 1674756075,
+                    "file_hash": "cb4199caae37eca816fd751e9530c7e1e4927fad8e9266b64a0b9a41614e4dea",
+                    "file_executable_hash": "0cf4f1586463669ec8b6e02d36e2b1f2769180d2454aaa007665f6b4277bc3cb"
+                },
+                "eappx": {}
+            },
+            "x86": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.6003.0_x86__8wekyb3d8bbwe.Appx",
+                    "file_size": 815021924,
+                    "version": "1.19.60.3",
+                    "revision": 1,
+                    "arch": "x86",
+                    "release_type": "release",
+                    "last_modified_unix": 1674756076,
+                    "file_hash": "bc933a271edd23414b4013adf413dbaaaa056f661d6e749e5a763578a4bfd893",
+                    "file_executable_hash": "ab615042a21195f5c6f0e65e077df2e1fcbf4d8230527cbd85fec0ccf6e0ce68"
+                },
+                "eappx": {}
+            },
+            "arm": {
+                "appx": {
+                    "file_name": "Microsoft.MinecraftUWP_1.19.6003.0_arm__8wekyb3d8bbwe.Appx",
+                    "file_size": 817216977,
+                    "version": "1.19.60.3",
+                    "revision": 1,
+                    "arch": "arm",
+                    "release_type": "release",
+                    "last_modified_unix": 1674756076,
+                    "file_hash": "017e4d4287357b7208a3ab3b247cb48e51d1f17075cfb82bed283f1294a11720",
+                    "file_executable_hash": "1184707a3071493791afae22c48494d76158b145b6889f6f3901457493653703"
+                },
+                "eappx": {}
+            }
+        }
+    }
+}

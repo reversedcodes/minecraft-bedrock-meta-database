@@ -1,12 +1,6 @@
-from pathlib import Path
-from typing import List, Optional, Tuple, Dict, Any
-from enum import StrEnum
-from datetime import datetime
-from email.utils import parsedate_to_datetime
-from httpx import HTTPStatusError
-
 import asyncio
 import json
+import logging
 import os
 import sys
 import re
@@ -17,27 +11,30 @@ import requests
 from xbox.webapi.authentication.manager import AuthenticationManager
 from xbox.webapi.authentication.models import OAuth2TokenResponse
 from xbox.webapi.common.signed_session import SignedSession
+from typing import List, Optional, Tuple, Dict, Any
+from email.utils import parsedate_to_datetime
+from httpx import HTTPStatusError
+from datetime import datetime
 
+from pathlib import Path
+from enum import StrEnum
+
+ROOT_PATH = Path(__file__).parent
+CLIENT_PATH = ROOT_PATH / "bedrock" / "client"
+GDK_RELEASE_PATH = CLIENT_PATH / "release" / "gdk"
+GDK_PREVIEW_PATH = CLIENT_PATH / "preview" / "gdk"
+CLIENT_VERSIONS_JSON_PATH = CLIENT_PATH / "versions.json"
+
+IS_CI = os.getenv("GITHUB_ACTIONS") == "true"
+HEADERS = {"User-Agent": "TorchCS/1.1"}
+TOKENS_FILE = Path("tokens.json")
+
+logger = logging.getLogger("BedrockClientFetcher")
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 class MinecraftVersionType(StrEnum):
     RELEASE = "7792d9ce-355a-493c-afbd-768f4a77c3b0"
     PREVIEW = "98bd2335-9b01-4e4c-bd05-ccc01614078b"
-
-
-ROOT_PATH = Path(__file__).parent
-BEDROCK_CLIENT_PATH = ROOT_PATH / "bedrock" / "client" / "gdk"
-BEDROCK_CLIENT_RELEASE_PATH = BEDROCK_CLIENT_PATH / "release"
-BEDROCK_CLIENT_PREVIEW_PATH = BEDROCK_CLIENT_PATH / "preview"
-
-HEADERS = {
-    "User-Agent": "TorchCS/1.1"
-}
-
-IS_CI = os.getenv("GITHUB_ACTIONS") == "true"
-TOKENS_FILE = Path("tokens.json")
-
-os.makedirs(BEDROCK_CLIENT_RELEASE_PATH, exist_ok=True)
-os.makedirs(BEDROCK_CLIENT_PREVIEW_PATH, exist_ok=True)
 
 async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
     session = SignedSession()
@@ -52,7 +49,7 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
             tokens_json = base64.b64decode(tokens_env_b64).decode("utf-8")
             auth_mgr.oauth = OAuth2TokenResponse.model_validate_json(tokens_json)
         except Exception as e:
-            print(f"Failed to parse TOKENS env: {e}")
+            logger.error(f"Failed to decode TOKENS env variable! err={e}")
             await session.__aexit__(None, None, None)
             sys.exit(-1)
     else:
@@ -62,12 +59,12 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
             auth_mgr.oauth = OAuth2TokenResponse.model_validate_json(tokens_raw)
         except FileNotFoundError as e:
             if IS_CI:
-                print("No TOKENS env and no tokens.json in CI, aborting.")
+                logger.error(f"{TOKENS_FILE} not found in CI environment! err={e}")
                 await session.__aexit__(None, None, None)
                 sys.exit(-1)
-            print(f"{TOKENS_FILE} not found, doing first-time OAuth flow. err={e}")
+            logger.info(f"{TOKENS_FILE} not found, doing first-time OAuth flow. err={e}")
             url = auth_mgr.generate_authorization_url()
-            print(f"Open in browser and login: {url}")
+            logger.info(f"Open in browser and login: {url}")
             authorization_code = input("Enter authorization code> ")
             tokens = await auth_mgr.request_oauth_token(authorization_code)
             auth_mgr.oauth = tokens
@@ -75,7 +72,7 @@ async def CreateAuthManager() -> Tuple[AuthenticationManager, SignedSession]:
     try:
         await auth_mgr.refresh_tokens()
     except HTTPStatusError as e:
-        print(f"Failed to refresh tokens! err={e}")
+        logger.error(f"Failed to refresh tokens! err={e}")
         await session.__aexit__(None, None, None)
         sys.exit(-1)
 
@@ -112,32 +109,14 @@ def parseMsixvcFilename(file_name: str) -> Optional[Dict[str, str]]:
     parts = [p for p in base.split("_") if p]
     if len(parts) < 4:
         return None
-    app_id = parts[0]
-    version = parts[1]
-    arch = parts[2]
-    family = parts[3]
-    return {"app_id": app_id, "version": version, "arch": arch, "family": family}
-
-def parseXspFilename(file_name: str) -> Optional[Dict[str, str]]:
-    lower = file_name.lower()
-    if not lower.endswith(".xsp"):
-        return None
-    base = file_name[:-4]
-    if not base.startswith("update-"):
-        return None
-    base = base[len("update-"):]
-    if "." not in base:
-        return None
-    version, guid = base.split(".", 1)
-    return {"target_version": version, "guid": guid}
+    return {"app_id": parts[0], "version": parts[1], "arch": parts[2], "family": parts[3]}
 
 def buildDownloadUrls(pkg: Dict[str, Any]) -> List[str]:
     cdn_roots = pkg.get("CdnRootPaths", [])
     rel = pkg.get("RelativeUrl", "")
     urls: List[str] = []
     for root in cdn_roots:
-        full = root + rel
-        urls.append(full)
+        urls.append(root + rel)
         if "assets1.xboxlive.com" in root:
             urls.append(root.replace("assets1.xboxlive.com", "assets1.xboxlive.cn") + rel)
         if "assets2.xboxlive.com" in root:
@@ -154,271 +133,183 @@ def resolveArchbyFilename(file_name: str) -> str:
         return "arm"
     return "unknown"
 
-def parseBuildVersion(version_str: str) -> List[int]:
-    return [int(x) for x in version_str.split(".")]
-
-def buildVersionbyFilename(file_name: str) -> str:
-    m_new = re.search(r"_(\d+\.\d+\.\d+\.\d+)_", file_name)
-
-    if m_new:
-        version_str_new = m_new.group(1)
-        try:
-            version_parts = parseBuildVersion(version_str_new)
-        except Exception:
-            version_parts = []
-
-        if len(version_parts) >= 2:
-            version_yy = version_parts[1]
-            
-            yy = datetime.now().year % 100
-            yyNext = (yy + 1) % 100
-
-            if version_yy == yy or version_yy == yyNext:
-                return version_str_new
-        
-    m_old = re.search(r"_(\d+\.\d+\.\d+)(\d{2})\.0_", file_name)
-
-    if m_old:
-        major = m_old.group(1)
-        minor = m_old.group(2)
-        return f"{major}.{minor}"
-    
-    return file_name
-
-def to_unix_timestamp(value: str) -> int | None:
+def to_unix_timestamp(value: str) -> Optional[int]:
     if not value:
         return None
     try:
         return int(datetime.fromisoformat(value).timestamp())
     except Exception:
         try:
-            dt = parsedate_to_datetime(value)
-            return int(dt.timestamp())
+            return int(parsedate_to_datetime(value).timestamp())
         except Exception:
             return None
 
-def resolvePackage(pkg: Dict[str, Any]) -> Dict[str, Any]:
-    file_name = pkg.get("FileName", "")
-    size = pkg.get("FileSize", 0)
-    content_id = pkg.get("ContentId")
-    version_id = pkg.get("VersionId")
-    modified = pkg.get("ModifiedDate")
-    urls = buildDownloadUrls(pkg)
-    msix_info = parseMsixvcFilename(file_name)
-    xsp_info = parseXspFilename(file_name)
-    version_pretty = buildVersionbyFilename(file_name)
-    arch = resolveArchbyFilename(file_name)
-    modified_unix = to_unix_timestamp(modified)
+def get_formatted_version(version: str) -> str:
+    parts = version.split(".")
+    if len(parts) != 4:
+        return version
 
-    result: Dict[str, Any] = {
-        "content_id": content_id,
-        "version_id": version_id,
+    if parts[3] == "70":
+        third = parts[2]
+        if len(third) <= 2:
+            parts[2] = "0"
+            parts[3] = str(int(third))
+        else:
+            parts[2] = str(int(third[:-2]))
+            parts[3] = third[-2:]
+    elif parts[3] == "0":
+        third = parts[2]
+        if len(third) <= 2:
+            parts[2] = "0"
+            parts[3] = str(int(third))
+        else:
+            parts[2] = str(int(third[:-2]))
+            parts[3] = str(int(third[-2:]))
+
+    parts = [str(int(p)) if p.isdigit() else p for p in parts]
+    return ".".join(parts)
+
+def resolvePackage(pkg: Dict[str, Any], release_type: str) -> Dict[str, Any]:
+    file_name = pkg.get("FileName", "")
+    msix_info = parseMsixvcFilename(file_name)
+
+    raw_version = msix_info["version"] if msix_info else ""
+    decoded_version = get_formatted_version(raw_version) if raw_version else "unknown"
+    arch = msix_info["arch"] if msix_info else resolveArchbyFilename(file_name)
+
+    return {
+        "content_id": pkg.get("ContentId"),
+        "version_id": pkg.get("VersionId"),
         "file_name": file_name,
-        "file_size": size,
-        "version": version_pretty,
-        "modified_date": modified,
-        "modified_unix": modified_unix,
+        "file_size": pkg.get("FileSize", 0),
+        "version": decoded_version,
+        "version_raw": raw_version,
+        "release_type": release_type,
+        "modified_date": pkg.get("ModifiedDate"),
+        "modified_unix": to_unix_timestamp(pkg.get("ModifiedDate", "")),
         "arch": arch,
-        "urls": urls,
+        "app_id": msix_info["app_id"] if msix_info else None,
+        "family": msix_info["family"] if msix_info else None,
+        "urls": buildDownloadUrls(pkg),
         "file_hash": None,
     }
 
-    if msix_info:
-        result["type"] = "full"
-        result["app_id"] = msix_info["app_id"]
-        result["version_raw"] = msix_info["version"]
-        result["arch"] = msix_info["arch"]
-        result["family"] = msix_info["family"]
-    elif xsp_info:
-        result["type"] = "delta"
-        result["delta_target_version"] = xsp_info["target_version"]
-        result["delta_guid"] = xsp_info["guid"]
-
-    return result
-
-def write_packages_to_disk(root: Path, packages: List[Dict[str, Any]]) -> None:
-    for pkg in packages:
-        arch = pkg.get("arch", "unknown")
-        version = pkg.get("version", "unknown")
-
-        arch_path = root.joinpath(arch)
-        if not arch_path.exists():
-            os.makedirs(arch_path, exist_ok=True)
-
-        version_path = arch_path.joinpath(version)
-        if not version_path.exists():
-            os.makedirs(version_path, exist_ok=True)
-
-        metadata_path = version_path.joinpath("metadata.json")
-        with metadata_path.open("w", encoding="utf-8") as f:
-            f.write(json.dumps(pkg, indent=4))
-
-def parse_version_number(ver: str) -> List[int]:
-    return [int(x) for x in re.findall(r"\d+", ver)]
-
-def collect_versions_by_arch(packages: List[Dict[str, Any]]) -> Dict[str, List[str]]:
-    buckets: Dict[str, set] = {
-        "x64": set(),
-        "x86": set(),
-        "arm": set(),
-    }
-    for pkg in packages:
-        arch = (pkg.get("arch") or "").lower()
-        if arch not in buckets:
-            continue
-        v = pkg.get("version")
-        if v:
-            buckets[arch].add(v)
-    out: Dict[str, List[str]] = {}
-    for arch, s in buckets.items():
-        lst = sorted(list(s), key=parse_version_number)
-        out[arch] = lst
-    return out
-
-def latest_by_arch(arch_map: Dict[str, List[str]]) -> Dict[str, str]:
-    result: Dict[str, str] = {}
-    for arch in ("x64", "x86", "arm"):
-        lst = arch_map.get(arch, [])
-        result[arch] = lst[0] if lst else ""
-    return result
-
-def collect_versions_from_disk(root: Path) -> Dict[str, set]:
-    versions: Dict[str, set] = {
-        "x64": set(),
-        "x86": set(),
-        "arm": set(),
-    }
-    for arch in ("x64", "x86", "arm"):
-        arch_path = root / arch
-        if not arch_path.is_dir():
-            continue
-        for child in arch_path.iterdir():
-            if child.is_dir():
-                versions[arch].add(child.name)
-    return versions
-
-def merge_versions(existing: Dict[str, set], new: Dict[str, List[str]]) -> Dict[str, List[str]]:
-    result: Dict[str, List[str]] = {}
-    for arch in ("x64", "x86", "arm"):
-        s = set(existing.get(arch, set()))
-        s.update(new.get(arch, []))
-        result[arch] = sorted(list(s), key=parse_version_number, reverse=True)
-    return result
-
-def write_versions_json(release_by_arch: Dict[str, List[str]], preview_by_arch: Dict[str, List[str]], path: Path) -> None:
-    data = {
-        "latest": {
-            "release": latest_by_arch(release_by_arch),
-            "preview": latest_by_arch(preview_by_arch),
-        },
-        "releases": {
-            "x64": release_by_arch.get("x64", []),
-            "x86": release_by_arch.get("x86", []),
-            "arm": release_by_arch.get("arm", []),
-        },
-        "previews": {
-            "x64": preview_by_arch.get("x64", []),
-            "x86": preview_by_arch.get("x86", []),
-            "arm": preview_by_arch.get("arm", []),
-        },
-    }
-    with path.open("w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
 def sha256_from_url(url: str) -> Optional[str]:
-    if not url:
-        return None
+    logger.info(f"Downloading & Hashing: {url}")
     try:
-        with requests.get(url, stream=True, timeout=60, headers=HEADERS) as r:
-            r.raise_for_status()
-            h = hashlib.sha256()
-            for chunk in r.iter_content(1024 * 1024):
-                if not chunk:
-                    continue
+        resp = requests.get(url, stream=True, timeout=60, headers=HEADERS)
+        resp.raise_for_status()
+        h = hashlib.sha256()
+        for chunk in resp.iter_content(1024 * 1024):
+            if chunk:
                 h.update(chunk)
         return h.hexdigest()
     except Exception as e:
-        print(f"Failed to hash {url}: {e}")
+        logger.error(f"Failed to hash {url}: {e}")
         return None
 
-def load_existing_metadata(root: Path, arch: str, version: str) -> Optional[Dict[str, Any]]:
-    meta_path = root / arch / version / "metadata.json"
-    if not meta_path.is_file():
+def load_existing_package(release_type: str, version: str, arch: str) -> Optional[Dict[str, Any]]:
+    path = CLIENT_PATH / release_type / "gdk" / f"{version}.json"
+    if not path.is_file():
         return None
     try:
-        with meta_path.open("r", encoding="utf-8") as f:
-            return json.load(f)
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data.get("binaries", {}).get("arch", {}).get(arch)
     except Exception as e:
-        print(f"Failed to read metadata {meta_path}: {e}")
+        logger.error(f"Failed to read {path}: {e}")
         return None
+
+def patch_versions_json(release_type: str, version: str):
+    if not CLIENT_VERSIONS_JSON_PATH.is_file():
+        logger.warning("versions.json not found, skipping patch")
+        return
+
+    with CLIENT_VERSIONS_JSON_PATH.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    versions_list: List[str] = data.get("version", {}).get("versions", {}).get("gdk", {}).get(release_type, [])
+
+    if version in versions_list:
+        return
+
+    versions_list.append(version)
+    versions_list.sort(key=lambda v: [int(x) for x in re.findall(r"\d+", v)], reverse=True)
+
+    data["version"]["versions"]["gdk"][release_type] = versions_list
+    data["version"]["latest"]["gdk"][release_type] = versions_list[0] if versions_list else ""
+
+    with CLIENT_VERSIONS_JSON_PATH.open("w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+
+    logger.info(f"Patched versions.json: gdk/{release_type} += {version}")
+
+def save_package(pkg: Dict[str, Any], release_type: str):
+    version = pkg.get("version", "unknown")
+    arch = (pkg.get("arch") or "unknown").lower()
+
+    out_dir = CLIENT_PATH / release_type / "gdk"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_file = out_dir / f"{version}.json"
+
+    patch_versions_json(release_type, version)
+
+
+    if out_file.is_file():
+        with out_file.open("r", encoding="utf-8") as f:
+            full_data = json.load(f)
+    else:
+        full_data = {"binaries": {"arch": {}}}
+
+    existing = full_data.get("binaries", {}).get("arch", {}).get(arch, {})
+    if existing.get("file_hash") and existing.get("file_hash") == pkg.get("file_hash"):
+        logger.info(f"Metadata for {version} ({arch}) already up to date. Skipping.")
+        return
+
+    full_data.setdefault("binaries", {}).setdefault("arch", {})[arch] = pkg
+
+    with out_file.open("w", encoding="utf-8") as f:
+        json.dump(full_data, f, indent=4)
+
+    logger.info(f"Saved metadata for {version} ({arch}) at {out_file}")
+    patch_versions_json(release_type, version)
 
 async def main():
     auth_mgr, session = await CreateAuthManager()
     try:
         auth_header = await getUpdateAuthorizationHeader(auth_mgr)
-        release_resp = await getBasePackageContent(session, MinecraftVersionType.RELEASE, auth_header)
-        preview_resp = await getBasePackageContent(session, MinecraftVersionType.PREVIEW, auth_header)
 
-        release_resolved: List[Dict[str, Any]] = []
-        preview_resolved: List[Dict[str, Any]] = []
-
-        if release_resp and release_resp.is_success:
-            release_data = release_resp.json()
-            for pkg in release_data.get("PackageFiles", []):
-                file_name = pkg.get("FileName", "")
-                if file_name.lower().endswith(".msixvc"):
-                    release_resolved.append(resolvePackage(pkg))
-
-        if preview_resp and preview_resp.is_success:
-            preview_data = preview_resp.json()
-            for pkg in preview_data.get("PackageFiles", []):
-                file_name = pkg.get("FileName", "")
-                if file_name.lower().endswith(".msixvc"):
-                    preview_resolved.append(resolvePackage(pkg))
-
-        for pkg in release_resolved:
-            arch = (pkg.get("arch") or "").lower()
-            version = pkg.get("version") or "unknown"
-
-            existing = load_existing_metadata(BEDROCK_CLIENT_RELEASE_PATH, arch, version)
-
-            if existing and existing.get("file_hash"):
-                pkg["file_hash"] = existing["file_hash"]
+        for version_type, release_type in [
+            (MinecraftVersionType.RELEASE, "release"),
+            (MinecraftVersionType.PREVIEW, "preview"),
+        ]:
+            resp = await getBasePackageContent(session, version_type, auth_header)
+            if not (resp and resp.is_success):
+                logger.warning(f"Failed to fetch {release_type} packages")
                 continue
 
-            urls = pkg.get("urls") or []
-            if urls:
-                pkg["file_hash"] = sha256_from_url(urls[0])
+            packages = resp.json().get("PackageFiles", [])
+            resolved = [
+                resolvePackage(pkg, release_type)
+                for pkg in packages
+                if pkg.get("FileName", "").lower().endswith(".msixvc")
+            ]
 
-        for pkg in preview_resolved:
-            arch = (pkg.get("arch") or "").lower()
-            version = pkg.get("version") or "unknown"
+            logger.info(f"[{release_type}] {len(resolved)} packages fetched")
 
-            existing = load_existing_metadata(BEDROCK_CLIENT_PREVIEW_PATH, arch, version)
+            for pkg in resolved:
+                arch = (pkg.get("arch") or "").lower()
+                version = pkg.get("version", "unknown")
 
-            if existing and existing.get("file_hash"):
-                pkg["file_hash"] = existing["file_hash"]
-                continue
+                existing = load_existing_package(release_type, version, arch)
+                if existing and existing.get("file_hash"):
+                    pkg["file_hash"] = existing["file_hash"]
+                else:
+                    urls = pkg.get("urls") or []
+                    if urls:
+                        pkg["file_hash"] = sha256_from_url(urls[0])
 
-            urls = pkg.get("urls") or []
-            if urls:
-                pkg["file_hash"] = sha256_from_url(urls[0])
-
-        write_packages_to_disk(BEDROCK_CLIENT_RELEASE_PATH, release_resolved)
-        write_packages_to_disk(BEDROCK_CLIENT_PREVIEW_PATH, preview_resolved)
-
-        existing_release = collect_versions_from_disk(BEDROCK_CLIENT_RELEASE_PATH)
-        existing_preview = collect_versions_from_disk(BEDROCK_CLIENT_PREVIEW_PATH)
-
-        release_from_api = collect_versions_by_arch(release_resolved)
-        preview_from_api = collect_versions_by_arch(preview_resolved)
-
-        release_by_arch = merge_versions(existing_release, release_from_api)
-        preview_by_arch = merge_versions(existing_preview, preview_from_api)
-
-        versions_json_path = BEDROCK_CLIENT_PATH / "versions.json"
-        write_versions_json(release_by_arch, preview_by_arch, versions_json_path)
-
+                save_package(pkg, release_type)
     finally:
         await session.__aexit__(None, None, None)
 
