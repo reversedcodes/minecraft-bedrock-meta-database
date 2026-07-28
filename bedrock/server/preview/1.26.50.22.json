@@ -10,6 +10,17 @@
             "last_modified_unix": 1785253470,
             "file_hash": "9233a9ad743646a3ae6c418319fd30d79488cd75de2a05bdec557d3a84489a93",
             "file_executable_hash": "63f4c8275c0ca04b994b7f9bab48e5b843126b388132108bab37f2376ea36548"
+        },
+        "windows": {
+            "file_name": "bedrock-server-1.26.50.22.zip",
+            "file_size": 91128607,
+            "version": "1.26.50.22",
+            "url": "https://www.minecraft.net/bedrockdedicatedserver/bin-win-preview/bedrock-server-1.26.50.22.zip",
+            "os": "windows",
+            "release_type": "preview",
+            "last_modified_unix": 1785261763,
+            "file_hash": "3ab37d20dcf1c5d96b8daa570d733929e5f0d2d06cffae6ee9bee92234a0885e",
+            "file_executable_hash": "1b476e493439404275005244200121ced755c929ecbfeba422b3e08b1394c587"
         }
     }
 }
