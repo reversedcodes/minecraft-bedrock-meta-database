@@ -1,0 +1,26 @@
+{
+    "binaries": {
+        "windows": {
+            "file_name": "bedrock-server-1.26.50.25.zip",
+            "file_size": 95249588,
+            "version": "1.26.50.25",
+            "url": "https://www.minecraft.net/bedrockdedicatedserver/bin-win-preview/bedrock-server-1.26.50.25.zip",
+            "os": "windows",
+            "release_type": "preview",
+            "last_modified_unix": 1786462732,
+            "file_hash": "e17d48051f089afb026ce8e51fe6a4410e0333e3ff636d2e935ca0ca383bc718",
+            "file_executable_hash": "bfebd4f4f9086a8d1032dd3b7274a40b5a7a642a38d468f0d66b81a888f6dac4"
+        },
+        "linux": {
+            "file_name": "bedrock-server-1.26.50.25.zip",
+            "file_size": 93746388,
+            "version": "1.26.50.25",
+            "url": "https://www.minecraft.net/bedrockdedicatedserver/bin-linux-preview/bedrock-server-1.26.50.25.zip",
+            "os": "linux",
+            "release_type": "preview",
+            "last_modified_unix": 1786462835,
+            "file_hash": "5ce930ff19368b785e3145b4becf108b359c8ddf40438cea95b1932deed490c5",
+            "file_executable_hash": "3bfb97b5ef0f789dbb28520ce851b22e982defda11ab8b18d649c45dd1408e7b"
+        }
+    }
+}
