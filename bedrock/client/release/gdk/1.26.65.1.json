@@ -1,0 +1,27 @@
+{
+    "binaries": {
+        "arch": {
+            "x64": {
+                "content_id": "7792d9ce-355a-493c-afbd-768f4a77c3b0",
+                "version_id": "1.26.6501.0.17dca53d-4e11-46d5-a3b1-36747fe82c9f",
+                "file_name": "Microsoft.MinecraftUWP_1.26.6501.0_x64__8wekyb3d8bbwe.msixvc",
+                "file_size": 2087256064,
+                "version": "1.26.65.1",
+                "version_raw": "1.26.6501.0",
+                "release_type": "release",
+                "modified_date": "2026-11-16T17:48:59+00:00",
+                "modified_unix": 1794851339,
+                "arch": "x64",
+                "app_id": "Microsoft.MinecraftUWP",
+                "family": "8wekyb3d8bbwe",
+                "urls": [
+                    "http://assets1.xboxlive.com/8/19ef2a46-d048-420e-93f1-1d386d81c65d/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.6501.0.2e8f9d04-0703-4a00-a3fd-2af9560248db/Microsoft.MinecraftUWP_1.26.6501.0_x64__8wekyb3d8bbwe.msixvc",
+                    "http://assets1.xboxlive.cn/8/19ef2a46-d048-420e-93f1-1d386d81c65d/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.6501.0.2e8f9d04-0703-4a00-a3fd-2af9560248db/Microsoft.MinecraftUWP_1.26.6501.0_x64__8wekyb3d8bbwe.msixvc",
+                    "http://assets2.xboxlive.com/8/19ef2a46-d048-420e-93f1-1d386d81c65d/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.6501.0.2e8f9d04-0703-4a00-a3fd-2af9560248db/Microsoft.MinecraftUWP_1.26.6501.0_x64__8wekyb3d8bbwe.msixvc",
+                    "http://assets2.xboxlive.cn/8/19ef2a46-d048-420e-93f1-1d386d81c65d/7792d9ce-355a-493c-afbd-768f4a77c3b0/1.26.6501.0.2e8f9d04-0703-4a00-a3fd-2af9560248db/Microsoft.MinecraftUWP_1.26.6501.0_x64__8wekyb3d8bbwe.msixvc"
+                ],
+                "file_hash": "5dacc4b2bfe44d105c8f89ff4372312f6ffc15673b364fd74b9a8595eb749a8a"
+            }
+        }
+    }
+}
